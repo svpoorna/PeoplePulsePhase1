@@ -7,7 +7,7 @@
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
-        "start-both": "concurrently \"npm run dev\" \"npm run start-api\"",
+        "start-both": "concurrently \"npm run start-api\" \"npm run dev\" ",
         "start-api": "cd ../RMT_API && dotnet run"
     },
   "dependencies": {
