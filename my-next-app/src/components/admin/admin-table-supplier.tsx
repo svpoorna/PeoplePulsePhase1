@@ -33,7 +33,8 @@ const AdminTableSupplier = () => {
   useEffect(() => {
     const fetchSuppliers = async () => {
       try {
-        const response = await api.get("/Supplier");
+          const response = await api.get("/Supplier");
+          console.log(response.data)
         setData(response.data);
       } catch (error) {
         console.error("Error fetching suppliers:", error);

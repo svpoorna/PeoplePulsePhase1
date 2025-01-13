@@ -18,23 +18,26 @@ import {
     disabled: boolean // Function to handle delete in AdminTable
   }
   
-  const DeleteProject = ({ id, onDelete, type, disabled }: DeleteProjectProps) => {
+const DeleteProject = ({ id, onDelete, type, disabled }: DeleteProjectProps) => {
+    const [isDialogOpen, setIsDialogOpen] = useState(false)
     const handleDelete = async() => {
       console.log(id);
       try {
-        const endpoint = type === "resource" ? `/Resource` : `/Project`;
+          const endpoint = type === "resource" ? "/Resource" :
+              type === "supplier" ? "/Supplier" : "/Project";
         const res = await api.patch(endpoint,{
           resourceID:id,
           status:'Inactive'
         });
           console.log("User deleted successfully", res);
-          onDelete(id); 
+          onDelete(id);
+          setIsDialogOpen(false)
       } catch (error) {
           console.log("Error deleting user", error)
       }
     };
     return (
-      <Dialog>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
           <Button className=" bg-blue-500" variant="default" disabled = {disabled}>
             Inactive
@@ -49,7 +52,7 @@ import {
           </DialogHeader>
           <DialogFooter>
             <Button type="submit" onClick={handleDelete}>
-              Delete user
+                        Inactive {type }
             </Button>
           </DialogFooter>
         </DialogContent>
