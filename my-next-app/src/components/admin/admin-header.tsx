@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react';
 import ThemeToggler from '../theme-toggler';
+import Link from 'next/link';
 
 interface HeaderProps {
   userName: string;
@@ -31,11 +32,12 @@ const AdminPageHeader: React.FC<HeaderProps> = ({ userName, userProfileUrl }) =>
         <span className="text-sm text-gray-700 dark:text-green-100">
           Welcome, <strong>{user.userName || 'Guest'}</strong>
         </span>
+        <Link href='/admin/profile'>
         <img
           src={user.userProfileUrl || userProfileUrl} // Update with the path to your profile image
           alt="User Profile"
           className="w-10 h-10 rounded-full border-2 border-gray-300"
-        />
+        /></Link>
       </div>
     </header>
   );
