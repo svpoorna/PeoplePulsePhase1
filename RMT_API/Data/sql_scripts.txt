@@ -1,0 +1,253 @@
+﻿create database peoplepulse_dev
+go
+
+use database peoplepulse_dev
+go
+
+CREATE TABLE Roles (
+    RoleID INT PRIMARY KEY,                      -- Unique identifier for each role
+    RoleName VARCHAR(50) NOT NULL,                -- Name of the role (e.g., Admin, Manager)
+	Status VARCHAR(20),                           -- Employment status (e.g., Active, Inactive, Informal)
+	Created_Date DATE NOT NULL,                   -- The date the client record was created
+    Created_By INT NOT NULL,                      -- User ID of the person who created the record
+    Updated_Date DATE,                            -- The date the client record was last updated
+    Updated_By INT,                               -- User ID of the person who last updated the record
+)
+GO
+
+CREATE TABLE Departments (
+    DepartmentID INT PRIMARY KEY,               -- Unique identifier for each department
+    DepartmentName VARCHAR(50) NOT NULL,         -- Name of the department
+	Status VARCHAR(20),                           -- Employment status (e.g., Active, Inactive, Informal)
+	Created_Date DATE NOT NULL,                   -- The date the client record was created
+    Created_By INT NOT NULL,                      -- User ID of the person who created the record
+    Updated_Date DATE,                            -- The date the client record was last updated
+    Updated_By INT,                               -- User ID of the person who last updated the record
+)
+GO
+
+CREATE TABLE Client(
+    ClientID INT PRIMARY KEY,                    -- Unique identifier for each client
+    ClientName VARCHAR(100) NOT NULL,             -- Name of the client
+    ContactInfo VARCHAR(100),                     -- Contact information for the client
+	Status VARCHAR(20),                           -- Employment status (e.g., Active, Inactive, Informal)
+	Created_Date DATE NOT NULL,                   -- The date the client record was created
+    Created_By INT NOT NULL,                      -- User ID of the person who created the record
+    Updated_Date DATE,                            -- The date the client record was last updated
+    Updated_By INT,                               -- User ID of the person who last updated the record
+)
+GO
+
+
+
+CREATE TABLE Resources (
+    ResourceID INT PRIMARY KEY,                  -- Unique identifier for the resource
+    FirstName VARCHAR(50) NOT NULL,               -- First name of the resource
+    LastName VARCHAR(50) NOT NULL,                -- Last name of the resource
+    Email VARCHAR(100) NOT NULL,                  -- Email address
+    Phone VARCHAR(20),                            -- Contact number
+    JobTitle VARCHAR(50),                         -- Role or designation of the resource
+    HireDate DATE,                                -- Date of joining
+    Status VARCHAR(20),                           -- Employment status (e.g., Active, Inactive, Informal)
+    DepartmentID INT,                             -- Foreign Key to the Department table
+    ManagerID INT,                                -- Self-referencing Foreign Key for reporting manager
+	Created_Date DATE NOT NULL,                   -- The date the client record was created
+    Created_By INT NOT NULL,                      -- User ID of the person who created the record
+    Updated_Date DATE,                            -- The date the client record was last updated
+    Updated_By INT,                               -- User ID of the person who last updated the record
+
+    FOREIGN KEY (DepartmentID) REFERENCES Departments(DepartmentID),  -- Foreign key to Department table
+    FOREIGN KEY (ManagerID) REFERENCES Resources(ResourceID)         -- Self-referencing foreign key
+);
+
+Go
+
+CREATE TABLE Projects(
+    ProjectID INT PRIMARY KEY,                    -- Unique identifier for the project
+    ProjectName VARCHAR(100) NOT NULL,             -- Name of the project
+    ClientID INT,                                  -- Foreign Key to the Client table
+    StartDate DATE,                                -- Project start date
+    EndDate DATE,                                  -- Project end date
+    Status VARCHAR(20),                            -- Project status (e.g., Active, Completed)
+	Created_Date DATE NOT NULL,                   -- The date the client record was created
+    Created_By INT NOT NULL,                      -- User ID of the person who created the record
+    Updated_Date DATE,                            -- The date the client record was last updated
+    Updated_By INT,                               -- User ID of the person who last updated the record
+
+    FOREIGN KEY (ClientID) REFERENCES Client(ClientID)  -- Foreign key to Client table
+);
+
+
+GO
+
+CREATE TABLE ResourceDeployments (
+    DeploymentID INT PRIMARY KEY,                -- Unique identifier for the resource deployment
+    ResourceID INT,                              -- Foreign Key to the Resource table
+    ProjectID INT,                               -- Foreign Key to the Project table
+    Role VARCHAR(50),                            -- Role of the resource in the project
+    StartDate DATE,                              -- Start date of deployment
+    EndDate DATE,                                -- End date of deployment
+    AllocationPercent DECIMAL(5, 2),             -- Percentage of time allocated (e.g., 100% for full-time)
+	Status VARCHAR(20),                           -- Employment status (e.g., Active, Inactive, Informal)
+	Created_Date DATE NOT NULL,                   -- The date the client record was created
+    Created_By INT NOT NULL,                      -- User ID of the person who created the record
+    Updated_Date DATE,                            -- The date the client record was last updated
+    Updated_By INT,                               -- User ID of the person who last updated the record
+
+    FOREIGN KEY (ResourceID) REFERENCES Resources(ResourceID),    -- Foreign key to Resource table
+    FOREIGN KEY (ProjectID) REFERENCES Projects(ProjectID)       -- Foreign key to Project table
+);
+
+
+GO
+
+CREATE TABLE Timesheets (
+    TimesheetID INT PRIMARY KEY,                  -- Unique identifier for the timesheet entry
+    ResourceID INT,                               -- Foreign Key to the Resource table
+    ProjectID INT,                                -- Foreign Key to the Project table
+    Date DATE,                                    -- Date of the timesheet entry
+    HoursWorked DECIMAL(4, 2),                     -- Number of hours worked (up to 9999.99 hours)
+    Notes TEXT,                                   -- Additional notes for the timesheet entry
+	Status VARCHAR(20),                           -- Employment status (e.g., Active, Inactive, Informal)
+	Created_Date DATE NOT NULL,                   -- The date the client record was created
+    Created_By INT NOT NULL,                      -- User ID of the person who created the record
+    Updated_Date DATE,                            -- The date the client record was last updated
+    Updated_By INT,                               -- User ID of the person who last updated the record
+
+    FOREIGN KEY (ResourceID) REFERENCES Resources(ResourceID),    -- Foreign key to Resource table
+    FOREIGN KEY (ProjectID) REFERENCES Projects(ProjectID)       -- Foreign key to Project table
+);
+
+GO
+
+CREATE TABLE Leaves (
+    LeaveID INT PRIMARY KEY,                      -- Unique identifier for the leave request
+    ResourceID INT,                               -- Foreign Key to the Resource table
+    LeaveType VARCHAR(50),                         -- Type of leave (e.g., Annual, Sick)
+    StartDate DATE,                                -- Start date of leave
+    EndDate DATE,                                  -- End date of leave
+    Status VARCHAR(20),                            -- Status of the leave (e.g., Pending, Approved, Denied)
+    ApproverID INT,                                -- Foreign Key to Resource table (for manager approval)
+	Created_Date DATE NOT NULL,                   -- The date the client record was created
+    Created_By INT NOT NULL,                      -- User ID of the person who created the record
+    Updated_Date DATE,                            -- The date the client record was last updated
+    Updated_By INT,                               -- User ID of the person who last updated the record
+
+    FOREIGN KEY (ResourceID) REFERENCES Resources(ResourceID),    -- Foreign key to Resource table
+    FOREIGN KEY (ApproverID) REFERENCES Resources(ResourceID)     -- Foreign key to Resource table (manager approval)
+);
+
+
+GO
+
+CREATE TABLE ResourceOnboardings (
+    OnboardingID INT PRIMARY KEY NOT NULL,          -- Unique ID for each onboarding record
+    ResourceID INT NOT NULL,                        -- Foreign Key referencing Resource table
+    OnboardingDate DATE NOT NULL,                   -- Date of onboarding
+    HandledByID INT NOT NULL,                       -- User ID of the person handling the event
+    DocumentName VARCHAR(255),                       -- Name of the attached document
+    DocumentPath VARCHAR(500),                       -- Path or URL of the document in storage
+    FileType VARCHAR(50),                           -- Type of file (e.g., PDF, DOCX)
+    FileSize INT,                                   -- Size of the file in bytes
+    Notes TEXT,                                     -- Additional notes related to onboarding
+	Status VARCHAR(20),                           -- Employment status (e.g., Active, Inactive, Informal)
+	Created_Date DATE NOT NULL,                   -- The date the client record was created
+    Created_By INT NOT NULL,                      -- User ID of the person who created the record
+    Updated_Date DATE,                            -- The date the client record was last updated
+    Updated_By INT,                               -- User ID of the person who last updated the record
+
+    FOREIGN KEY (ResourceID) REFERENCES Resources(ResourceID),  -- Foreign key to Resource table
+    FOREIGN KEY (HandledByID) REFERENCES Resources(ResourceID)  -- Foreign key to Resource table (Handled by)
+);
+
+GO
+
+CREATE TABLE ResourceOffboardings (
+    OffboardingID INT PRIMARY KEY NOT NULL,          -- Unique ID for each offboarding record
+    ResourceID INT NOT NULL,                         -- Foreign Key referencing Resource table
+    OffboardingDate DATE NOT NULL,                   -- Date of offboarding
+    HandledByID INT NOT NULL,                        -- User ID of the person handling the offboarding
+    ExitDocumentName VARCHAR(255),                    -- Name of the attached exit document
+    DocumentPath VARCHAR(500),                        -- Path or URL of the document in storage
+    FileType VARCHAR(50),                            -- Type of file (e.g., PDF, DOCX)
+    FileSize INT,                                    -- Size of the file in bytes
+    ExitReason VARCHAR(255),                         -- Reason for offboarding
+    Notes TEXT,                                      -- Additional notes related to offboarding
+	Status VARCHAR(20),                           -- Employment status (e.g., Active, Inactive, Informal)
+	Created_Date DATE NOT NULL,                   -- The date the client record was created
+    Created_By INT NOT NULL,                      -- User ID of the person who created the record
+    Updated_Date DATE,                            -- The date the client record was last updated
+    Updated_By INT,                               -- User ID of the person who last updated the record
+
+    FOREIGN KEY (ResourceID) REFERENCES Resources(ResourceID),   -- Foreign key to Resource table
+    FOREIGN KEY (HandledByID) REFERENCES Resources(ResourceID)   -- Foreign key to Resource table (Handled by)
+);
+
+GO
+
+CREATE TABLE Users (
+    UserID INT PRIMARY KEY,                         -- Unique identifier for each user
+    FullName VARCHAR(100) NOT NULL,                 -- User’s full name
+    Email VARCHAR(100) NOT NULL,                    -- User’s email address
+    RoleID int,                                     
+    Role VARCHAR(50) NOT NULL,                      -- Role of the user (e.g., "Manager", "Admin")
+    IsActive Bit NOT NULL,                       -- Indicates if the user is active (TRUE or FALSE)
+    CreatedDate DATE NOT NULL,                        -- Date the user was added to the system
+	Created_Date DATE NOT NULL,                   -- The date the client record was created
+    Created_By INT NOT NULL,                      -- User ID of the person who created the record
+    Updated_Date DATE,                            -- The date the client record was last updated
+    Updated_By INT,                               -- User ID of the person who last updated the record
+    FOREIGN KEY (RoleID) REFERENCES Roles(RoleID),   -- Foreign key to Roles table
+);
+
+GO
+
+CREATE TABLE ResourceLifecycle (
+    LifecycleID INT PRIMARY KEY,                   -- Unique identifier for each lifecycle event
+    ResourceID INT,                                -- Foreign Key to the Resource table
+    LifecycleType VARCHAR(20) NOT NULL,             -- Type of lifecycle event (e.g., "Onboarding", "Offboarding")
+    StartDate DATE NOT NULL,                        -- Start date for the lifecycle event
+    EndDate DATE,                                  -- End date for the lifecycle event (optional)
+    Status VARCHAR(20),                            -- Status of the process (e.g., "In Progress," "Completed")
+    Notes TEXT,                                    -- Additional details related to the lifecycle event
+    HandledByID INT,                               -- Foreign Key to Users table to identify the manager or admin overseeing the event
+	Created_Date DATE NOT NULL,                   -- The date the client record was created
+    Created_By INT NOT NULL,                      -- User ID of the person who created the record
+    Updated_Date DATE,                            -- The date the client record was last updated
+    Updated_By INT,                               -- User ID of the person who last updated the record
+
+    FOREIGN KEY (ResourceID) REFERENCES Resources(ResourceID),   -- Foreign key to Resource table
+    FOREIGN KEY (HandledByID) REFERENCES Users(UserID)           -- Foreign key to Users table
+);
+
+GO
+
+
+CREATE TABLE Supplier (
+    SupplierID INT IDENTITY(1,1) PRIMARY KEY, -- Auto-incrementing primary key
+    SupplierName VARCHAR(100) NOT NULL,      -- Supplier's name
+    ContactInfo VARCHAR(100) NOT NULL,       -- Contact information
+    PAN VARCHAR(20) NOT NULL,                -- PAN Details
+    GST VARCHAR(100) NOT NULL,               -- GST ID Details
+    PaymentTerms VARCHAR(20) NOT NULL,       -- Payment terms (e.g., Monthly, Quarterly, etc.)
+    Status VARCHAR(20) NOT NULL,             -- Status (e.g., Active, Inactive)
+    ClientID INT,
+	Created_Date DATE NOT NULL,				 -- The date the client record was created
+    Created_By INT NOT NULL,				 -- User ID of the person who created the record
+    Updated_Date DATE,						 -- The date the client record was last updated
+    Updated_By INT,							 -- User ID of the person who last updated the record
+    FOREIGN KEY (ClientID) REFERENCES Clients(ClientID)
+)
+GO
+
+CREATE TABLE PublicHolidays (
+    PHID INT IDENTITY(1,1) PRIMARY KEY, -- Auto-incrementing primary key
+    PHName VARCHAR(100) NOT NULL,       -- Public Holiday Name
+    PHDate DATE NOT NULL,               -- Public Holiday Date
+    PHYear DATE NOT NULL,               -- Public Holiday Year
+	Created_Date DATE NOT NULL,			-- The date the client record was created
+    Created_By INT NOT NULL,			-- User ID of the person who created the record
+    Updated_Date DATE,					-- The date the client record was last updated
+    Updated_By INT						-- User ID of the person who last updated the record
+)
+GO
