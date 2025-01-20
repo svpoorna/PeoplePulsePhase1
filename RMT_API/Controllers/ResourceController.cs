@@ -29,6 +29,18 @@ namespace RMT_API.Controllers
 			return Ok(resource);
 		}
 
+		[HttpGet("resources/{projectId}")]
+		public async Task<IActionResult> GetResourcesByProjectId(int projectId)
+		{
+			var resource = await _service.GetResourcesByProjectId(projectId);
+			if (resource == null)
+			{
+				return NotFound();
+			}
+
+			return Ok(resource);
+		}
+
 		[HttpPost]
 		public async Task<IActionResult> CreateResource([FromBody] ResourceDto resource)
 		{

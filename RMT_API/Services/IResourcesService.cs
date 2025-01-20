@@ -6,9 +6,10 @@ namespace RMT_API.Services
 	{
 		Task<IEnumerable<ResourceDto>> GetAllResourcesAsync();
 		Task<ResourceDto> GetResourceByIdAsync(int id);
+		Task<IEnumerable<ResourceDto>> GetResourcesByProjectId(int projectId);
 		Task AddResourceAsync(ResourceDto resource);
 		Task UpdateResourceAsync(ResourceDto resource);
 		Task DeleteResourceAsync(int id);
-		Task ChangeStatusResourceAsync(ResourceDto resource);
+		Task ChangeStatusResourceAsync(ResourceDto resource); 
 	}
 }

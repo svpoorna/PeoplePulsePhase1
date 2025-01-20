@@ -38,5 +38,11 @@ namespace RMT_API.Services
 		{
 			await resourceRepository.ChangeStatusResource(_mapper.Map<Resource>(resource));
 		}
+
+		public async Task<IEnumerable<ResourceDto>> GetResourcesByProjectId(int projectId)
+		{
+			var response = await resourceRepository.GetResourcesByProjectId(projectId);
+			return _mapper.Map<IEnumerable<ResourceDto>>(response);
+		}
 	}
 }
