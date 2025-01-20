@@ -7,6 +7,10 @@ import {
   Clock5,
   FolderOpenDot,
   Container,
+  Notebook,
+  GlobeLock,
+  CalendarFold,
+  CalendarDays,
 } from "lucide-react";
 import {
   Tooltip,
@@ -46,6 +50,10 @@ export function AdminSidebar() {
     { href: '/admin/manage-resource', icon: User, label: 'Manage Resource' },
     { href: '/admin/manage-supplier', icon: Container, label: 'Manage Supplier' },
     { href: '/admin/timesheet', icon: Clock5, label: 'TImesheets' },
+    { href: '/admin/resource-deployment', icon: GlobeLock, label: 'Resource Deployment' },
+    { href: '/admin/roster-management', icon: CalendarFold, label: 'Roster Management' },
+    { href: '/admin/apply-leaves', icon: CalendarDays, label: 'Apply Leaves' },
+    { href: '/admin/report', icon: Notebook, label: 'Reports' },
   ];
 
 

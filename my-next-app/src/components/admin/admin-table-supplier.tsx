@@ -88,7 +88,7 @@ const AdminTableSupplier = () => {
             <TableHead className="text-right">Action</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody className="dark:bg-inherit dark:text-black">
+        <TableBody className="dark:bg-inherit dark:text-white">
           {filteredData.map((row: SupplierRow, index) => (
             <TableRow key={row.supplierID}>
               <TableCell className="font-medium">{index + 1}</TableCell>

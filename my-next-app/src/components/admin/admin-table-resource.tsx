@@ -93,7 +93,7 @@ const AdminTableResource = () => {
             <TableHead className="text-right">Action</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody className="dark:bg-inherit dark:text-black">
+        <TableBody className="dark:bg-inherit dark:text-white">
           {filteredData.map((row: RowType, index) => (
             <TableRow key={row.resourceID}>
               <TableCell className="font-medium">{index + 1}</TableCell>

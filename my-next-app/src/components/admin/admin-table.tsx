@@ -86,10 +86,10 @@ const AdminTable = () => {
             <TableHead className="text-right">Action</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody className="dark:bg-inherit dark:text-black">
+        <TableBody className="dark:bg-inherit">
           {filteredData.map((row: RowType, index) => (
             <TableRow key={row.projectID}>
-              <TableCell className="font-medium">{index + 1}</TableCell>
+              <TableCell className="font-medium ">{index + 1}</TableCell>
               <TableCell className="">{row.projectName}</TableCell>
               <TableCell>{row.startDate}</TableCell>
               <TableCell>{row.endDate}</TableCell>
