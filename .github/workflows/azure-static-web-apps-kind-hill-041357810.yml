@@ -25,11 +25,11 @@ jobs:
           node-version: '22'
       - name: Install Dependencies
         run: |
-          cd my-next-app/src
+          cd my-next-app
           npm install --legacy-peer-deps  # This bypasses the peer dependency issue
       - name: Build Next.js App
         run: |
-          cd my-next-app/src
+          cd my-next-app
           npm run build
       - name: Build And Deploy
         id: builddeploy
